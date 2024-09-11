@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "dj-drf"
+version = "0.1.0"
+description = ""
+authors = ["md <marceldiomare@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "4.2.15"
+psycopg2-binary = "^2.9.9"
+pillow = "^10.4.0"
+djangorestframework = "^3.15.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
