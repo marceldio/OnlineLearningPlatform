@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_alter_user_options_remove_user_username_user_avatar_and_more'),
+        ("users", "0002_alter_user_options_remove_user_username_user_avatar_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='phone',
-            field=models.CharField(blank=True, max_length=15, null=True, verbose_name='Телефон'),
+            model_name="user",
+            name="phone",
+            field=models.CharField(
+                blank=True, max_length=15, null=True, verbose_name="Телефон"
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='city',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Город'),
+            model_name="user",
+            name="city",
+            field=models.CharField(
+                blank=True, max_length=100, null=True, verbose_name="Город"
+            ),
         ),
     ]

@@ -5,10 +5,12 @@ from django.db import models
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name="Email")
-    phone = models.CharField(max_length=15, verbose_name="Телефон", blank=True, null=True)
+    phone = models.CharField(
+        max_length=15, verbose_name="Телефон", blank=True, null=True
+    )
     city = models.CharField(max_length=100, verbose_name="Город", blank=True, null=True)
     avatar = models.ImageField(
-        upload_to="users/", blank=True, null=True, verbose_name="Аватар"
+        upload_to="users/avatars", blank=True, null=True, verbose_name="Аватар"
     )
     is_active = models.BooleanField(default=False, verbose_name="Активный")
     token = models.CharField(
@@ -24,5 +26,3 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
-
-
