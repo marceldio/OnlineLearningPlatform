@@ -20,9 +20,7 @@ class Lesson(models.Model):
     preview = models.ImageField(
         upload_to="lms/lesson", verbose_name="Превью", blank=True, null=True
     )
-    video = models.FileField(
-        upload_to="lms/videos", verbose_name="Видео", blank=True, null=True
-    )
+    video = models.URLField( verbose_name="Видео", blank=True, null=True)
 
     class Meta:
         verbose_name = "Урок"

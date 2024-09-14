@@ -12,8 +12,11 @@ psycopg2-binary = "^2.9.9"
 pillow = "^10.4.0"
 djangorestframework = "^3.15.2"
 python-dotenv = "^1.0.1"
-black = "^24.8.0"
-isort = "^5.13.2"
+
+
+[tool.poetry.group.lint.dependencies]
+black = "^23.1.0"
+isort = "^5.10.1"
 
 
 [build-system]
