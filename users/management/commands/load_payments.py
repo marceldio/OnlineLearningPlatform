@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
         Payment.objects.create(
             user=user1,
-            payment_date=datetime(2024, 9, 14, 12, 0),
+            payment_date=datetime(2024, 9, 16, 21, 0),
             paid_course=course,
             amount=1000.00,
             payment_method="cash"
@@ -24,7 +24,15 @@ class Command(BaseCommand):
 
         Payment.objects.create(
             user=user2,
-            payment_date=datetime(2024, 9, 14, 15, 0),
+            payment_date=datetime(2024, 9, 16, 19, 0),
+            paid_course=course,
+            amount=1000.00,
+            payment_method="cash"
+        )
+
+        Payment.objects.create(
+            user=user2,
+            payment_date=datetime(2024, 9, 17, 1, 0),
             paid_lesson=lesson,
             amount=500.00,
             payment_method="transfer"
