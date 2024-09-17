@@ -14,13 +14,15 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    course = models.ForeignKey(Course, related_name='lessons', verbose_name="Курс", on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course, related_name="lessons", verbose_name="Курс", on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=200, verbose_name="Название урока")
     description = models.TextField(verbose_name="Описание урока", blank=True, null=True)
     preview = models.ImageField(
         upload_to="lms/lesson", verbose_name="Превью", blank=True, null=True
     )
-    video = models.URLField( verbose_name="Видео", blank=True, null=True)
+    video = models.URLField(verbose_name="Видео", blank=True, null=True)
 
     class Meta:
         verbose_name = "Урок"
