@@ -38,7 +38,7 @@ class User(AbstractUser):
     avatar = models.ImageField(
         upload_to="users/avatars", blank=True, null=True, verbose_name="Аватар"
     )
-    is_active = models.BooleanField(default=False, verbose_name="Активный")
+    is_active = models.BooleanField(default=True, verbose_name="Активный")
     token = models.CharField(
         max_length=255, verbose_name="Токен", blank=True, null=True
     )
