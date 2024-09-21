@@ -12,7 +12,6 @@ from users.permissions import IsModer, IsOwner
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    # permission_classes = [IsAuthenticated, IsModer]
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -45,12 +44,6 @@ class LessonCreateApiView(CreateAPIView):
     serializer_class = LessonSerializer
     permission_classes = (~IsModer, IsAuthenticated)
 
-    # def has_permission(self):
-    #     # Запрещаем модераторам создавать уроки
-    #     if self.request.user.groups.filter(name="moders").exists():
-    #         return False
-    #     return super().has_permission()
-
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -62,20 +55,6 @@ class LessonListApiView(ListAPIView):
     permission_classes = (
         IsModer | IsOwner,
     )  # Просмотр доступен модераторам и владельцам
-
-
-# # Детализированное представление урока - доступно для модераторов
-# class LessonRetrieveApiView(RetrieveAPIView):
-#     queryset = Lesson.objects.all()
-#     serializer_class = LessonSerializer
-#     permission_classes = [IsAuthenticated, IsModer]  # Чтение доступно модераторам
-#
-#
-# # Обновление уроков - доступно для модераторов
-# class LessonUpdateApiView(UpdateAPIView):
-#     queryset = Lesson.objects.all()
-#     serializer_class = LessonSerializer
-#     permission_classes = [IsAuthenticated, IsModer]  # Обновление доступно модераторам
 
 
 class LessonRetrieveUpdateApiView(RetrieveUpdateAPIView):

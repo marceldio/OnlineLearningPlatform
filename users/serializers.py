@@ -5,8 +5,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from lms.models import Course, Lesson
 from users.models import Payment, User
 
-# from django.contrib.auth.models import User
-
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,12 +59,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_payment_history(self, obj):
         payments = Payment.objects.filter(user=obj)
         return PaymentSerializer(payments, many=True).data
-
-
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = "__all__"
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
