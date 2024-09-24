@@ -1,9 +1,9 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework import serializers
+from lms.models import Lesson, Course
+from lms.validators import validate_youtube_url
 
-from lms.models import Course, Lesson
-
-
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
+    video = serializers.URLField(validators=[validate_youtube_url])
     class Meta:
         model = Lesson
         fields = [
@@ -13,14 +13,14 @@ class LessonSerializer(ModelSerializer):
             "video",
             "course",
             "owner",
-        ]  # Указываем нужные поля урока
+        ]
 
 
-class CourseSerializer(ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(
         many=True, read_only=True
     )  # Вложенный сериализатор для уроков
-    lessons_count = SerializerMethodField()  # Поле для вывода количества уроков
+    lessons_count = serializers.SerializerMethodField()  # Поле для вывода количества уроков
 
     class Meta:
         model = Course
@@ -30,7 +30,7 @@ class CourseSerializer(ModelSerializer):
         return obj.lessons.count()  # Возвращаем количество уроков, связанных с курсом
 
 
-class CourseDetailSerializer(ModelSerializer):
+class CourseDetailSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)  # Вложенные уроки
 
     class Meta:
