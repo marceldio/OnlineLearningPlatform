@@ -45,12 +45,18 @@ class Lesson(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name='subscriptions')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subscriptions')
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="subscriptions"
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="subscriptions"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"
-        unique_together = ['user', 'course']  # Запрещаем дублирование подписок для одного и того же пользователя
-
+        unique_together = [
+            "user",
+            "course",
+        ]  # Запрещаем дублирование подписок для одного и того же пользователя

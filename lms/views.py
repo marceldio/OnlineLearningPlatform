@@ -1,5 +1,6 @@
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveUpdateAPIView, get_object_or_404)
+                                     ListAPIView, RetrieveUpdateAPIView,
+                                     get_object_or_404)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -87,7 +88,7 @@ class SubscriptionAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        course_id = request.data.get('course_id')
+        course_id = request.data.get("course_id")
         course_item = get_object_or_404(Course, id=course_id)
 
         # Получаем подписку пользователя на курс, если она существует
@@ -95,9 +96,11 @@ class SubscriptionAPIView(APIView):
 
         if subs_item.exists():
             subs_item.delete()  # Удаляем подписку
-            message = 'Подписка удалена'
+            message = "Подписка удалена"
         else:
-            Subscription.objects.create(user=user, course=course_item)  # Создаем подписку
-            message = 'Подписка добавлена'
+            Subscription.objects.create(
+                user=user, course=course_item
+            )  # Создаем подписку
+            message = "Подписка добавлена"
 
         return Response({"message": message})
