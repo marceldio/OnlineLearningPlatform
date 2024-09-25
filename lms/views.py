@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveUpdateAPIView,
                                      get_object_or_404)
@@ -43,11 +44,21 @@ class CourseViewSet(ModelViewSet):
         return super().get_permissions()
 
 
-# Создание уроков - модераторы не могут создавать уроки
 class LessonCreateApiView(CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (~IsModer, IsAuthenticated)
+    permission_classes = [
+        IsAuthenticated
+    ]  # Убедимся, что только аутентифицированные пользователи могут создавать
+
+    def post(self, request, *args, **kwargs):
+        # Добавляем проверку внутри
+        if request.user.groups.filter(name="moders").exists():
+            return Response(
+                {"detail": "Модераторы не могут создавать уроки."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return super().post(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -55,12 +66,10 @@ class LessonCreateApiView(CreateAPIView):
 
 # Список уроков - доступен для модераторов для чтения
 class LessonListApiView(ListAPIView):
-    queryset = Lesson.objects.all()
+    queryset = Lesson.objects.all().order_by("id")  # Добавляем сортировку
     serializer_class = LessonSerializer
-    pagination_class = LessonPagination  # Добавляем пагинацию
-    permission_classes = (
-        IsModer | IsOwner,
-    )  # Просмотр доступен модераторам и владельцам
+    pagination_class = LessonPagination
+    permission_classes = (IsModer | IsOwner,)
 
 
 class LessonRetrieveUpdateApiView(RetrieveUpdateAPIView):
@@ -76,11 +85,12 @@ class LessonRetrieveUpdateApiView(RetrieveUpdateAPIView):
 class LessonDestroyApiView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (
-        IsAuthenticated,
-        IsOwner,
-        ~IsModer,
-    )  # Могут удалять только владельцы
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    def delete(self, request, *args, **kwargs):
+        lesson = self.get_object()
+        print(f"User: {request.user}, Owner: {lesson.owner}")
+        return super().delete(request, *args, **kwargs)
 
 
 class SubscriptionAPIView(APIView):
