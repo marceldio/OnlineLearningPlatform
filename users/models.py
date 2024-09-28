@@ -99,4 +99,8 @@ class Payment(models.Model):
         verbose_name_plural = "Платежи"
 
     def __str__(self):
-        return f"Payment for {self.course} by {self.user} on {self.payment_date}"
+        if self.paid_course:
+            return f"Payment for course '{self.paid_course}' by {self.user} on {self.payment_date}"
+        elif self.paid_lesson:
+            return f"Payment for lesson '{self.paid_lesson}' by {self.user} on {self.payment_date}"
+        return f"Payment by {self.user} on {self.payment_date}"
