@@ -16,6 +16,7 @@ django-filter = "^24.3"
 djangorestframework-simplejwt = "^5.3.1"
 ipython = "^8.27.0"
 coverage = "^7.6.1"
+drf-yasg = "^1.21.7"
 
 [tool.poetry.group.lint.dependencies]
 black = "^23.1.0"
