@@ -1,8 +1,8 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-
 from dotenv import load_dotenv
+import stripe
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "lms",
     "django_filters",
     "rest_framework_simplejwt",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,6 @@ SIMPLE_JWT = {
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+STRIPE_SECRET_KEY = "sk_test_51Q46CGLcTLGq7NXlQctO1iT54l8dfVncmd9TKGSKDhJQtkHT4rwF7xyRTHAMWt0kegzqvqd3tCsUK4FBjuERynDK00tvMzrACH"
+stripe.api_key = STRIPE_SECRET_KEY

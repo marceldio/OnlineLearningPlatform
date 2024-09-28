@@ -65,7 +65,7 @@ class Payment(models.Model):
     user = models.ForeignKey(
         User, verbose_name="Пользователь", on_delete=models.CASCADE
     )
-    payment_date = models.DateTimeField(verbose_name="Дата оплаты")
+    payment_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата оплаты")
     paid_course = models.ForeignKey(
         Course,
         verbose_name="Оплаченный курс",
@@ -86,10 +86,17 @@ class Payment(models.Model):
     payment_method = models.CharField(
         max_length=10, choices=PAYMENT_METHODS, verbose_name="Способ оплаты"
     )
+    currency = models.CharField(max_length=10, default="usd", verbose_name="Валюта")
+    stripe_session_id = models.CharField(
+        max_length=255, blank=True, null=True, verbose_name="ID сессии Stripe"
+    )
+    stripe_payment_status = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="Статус платежа"
+    )
 
     class Meta:
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
 
     def __str__(self):
-        return f"Payment by {self.user} on {self.payment_date}"
+        return f"Payment for {self.course} by {self.user} on {self.payment_date}"

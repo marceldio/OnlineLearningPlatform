@@ -10,12 +10,14 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ["id", "title", "description"]
+        ref_name = "User_CourseSerializer"
 
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ["id", "title", "description", "video"]
+        ref_name = "User_LessonSerializer"
 
 
 class PaymentSerializer(serializers.ModelSerializer):

@@ -17,6 +17,7 @@ class LessonSerializer(serializers.ModelSerializer):
             "course",
             "owner",
         ]
+        ref_name = "LMS_LessonSerializer"
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -39,6 +40,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "lessons_count",
             "is_subscribed",
         ]
+        ref_name = "LMS_CourseSerializer"
 
     def get_lessons_count(self, obj):
         return obj.lessons.count()  # Возвращаем количество уроков, связанных с курсом
