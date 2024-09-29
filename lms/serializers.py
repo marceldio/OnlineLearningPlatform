@@ -9,14 +9,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = [
-            "id",
-            "title",
-            "description",
-            "video",
-            "course",
-            "owner",
-        ]
+        fields = ["id", "title", "description", "video", "course", "owner", "price"]
         ref_name = "LMS_LessonSerializer"
 
 
@@ -39,6 +32,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "lessons",
             "lessons_count",
             "is_subscribed",
+            "price",
         ]
         ref_name = "LMS_CourseSerializer"
 
@@ -57,4 +51,4 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ["id", "title", "description", "preview", "owner", "lessons"]
+        fields = ["id", "title", "description", "preview", "owner", "lessons", "price"]

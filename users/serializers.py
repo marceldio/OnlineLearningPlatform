@@ -9,14 +9,14 @@ from users.models import Payment, User
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ["id", "title", "description"]
+        fields = ["id", "title", "description", "price"]
         ref_name = "User_CourseSerializer"
 
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ["id", "title", "description", "video"]
+        fields = ["id", "title", "description", "video", "price", "course"]
         ref_name = "User_LessonSerializer"
 
 
@@ -27,14 +27,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = [
-            "id",
-            "payment_date",
-            "paid_course",
-            "paid_lesson",
-            "amount",
-            "payment_method",
-        ]
+        fields = "__all__"
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

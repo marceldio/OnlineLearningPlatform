@@ -1,8 +1,9 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-from dotenv import load_dotenv
+
 import stripe
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -121,5 +123,22 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-STRIPE_SECRET_KEY = "sk_test_51Q46CGLcTLGq7NXlQctO1iT54l8dfVncmd9TKGSKDhJQtkHT4rwF7xyRTHAMWt0kegzqvqd3tCsUK4FBjuERynDK00tvMzrACH"
-stripe.api_key = STRIPE_SECRET_KEY
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+
+# Настройки для Celery:
+# URL-адрес брокера сообщений
+# CELERY_BROKER_URL = 'redis://localhost:6379' # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # как в уроке
+
+# URL-адрес брокера результатов, также Redis
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = "UTC"
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = 30 * 60
