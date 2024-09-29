@@ -80,9 +80,7 @@ class Payment(models.Model):
         blank=True,
         null=True,
     )
-    amount = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="Сумма оплаты"
-    )
+    amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
     payment_method = models.CharField(
         max_length=10, choices=PAYMENT_METHODS, verbose_name="Способ оплаты"
     )
@@ -92,6 +90,9 @@ class Payment(models.Model):
     )
     stripe_payment_status = models.CharField(
         max_length=50, blank=True, null=True, verbose_name="Статус платежа"
+    )
+    link = models.URLField(
+        max_length=400, blank=True, null=True, verbose_name="Ссылка на оплату"
     )
 
     class Meta:
