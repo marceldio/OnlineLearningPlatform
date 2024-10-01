@@ -1,9 +1,12 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-
 import stripe
 from dotenv import load_dotenv
+import environ
+from celery.schedules import crontab
+from celery import Celery
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -142,3 +145,31 @@ CELERY_TASK_TRACK_STARTED = True
 
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Инициализация переменных окружения
+env = environ.Env()
+environ.Env.read_env()
+
+# Настройки Redis
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+REDIS_DB = env('REDIS_DB')
+REDIS_PASSWORD = env('REDIS_PASSWORD', default=None)
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": REDIS_PASSWORD,
+        }
+    }
+}
+
+CELERY_BEAT_SCHEDULE = {
+    'block_inactive_users': {
+        'task': 'users.tasks.block_inactive_users',
+        'schedule': crontab(minute=0, hour=0),  # Запуск каждый день в полночь
+    },
+}

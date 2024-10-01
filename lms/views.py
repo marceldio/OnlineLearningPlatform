@@ -12,6 +12,9 @@ from lms.paginators import CoursePagination, LessonPagination
 from lms.serializers import (CourseDetailSerializer, CourseSerializer,
                              LessonSerializer)
 from users.permissions import IsModer, IsOwner
+from datetime import timedelta
+from django.utils import timezone
+from lms.tasks import send_course_update_email
 
 
 class CourseViewSet(ModelViewSet):
@@ -42,6 +45,25 @@ class CourseViewSet(ModelViewSet):
                 ~IsModer | IsOwner,
             )  # Удаление доступно владельцам, не модераторам
         return super().get_permissions()
+
+    def update_course(request, course_id):
+        course = Course.objects.get(id=course_id)
+        course_last_updated = course.updated_at
+
+        # Обновляем курс (логика обновления курса)
+        course.title = request.data.get('title', course.title)
+        course.save()
+
+        # Проверяем, обновлялся ли курс более 4 часов назад
+        if course_last_updated < timezone.now() - timedelta(hours=4):
+            # Получаем всех подписанных пользователей
+            subscriptions = Subscription.objects.filter(course=course)
+            user_ids = subscriptions.values_list('user_id', flat=True)
+
+            # Запускаем асинхронную задачу для отправки писем
+            send_course_update_email.delay(course.id, list(user_ids))
+
+        return Response({'status': 'Курс обновлён'}, status=status.HTTP_200_OK)
 
 
 class LessonCreateApiView(CreateAPIView):
@@ -79,6 +101,25 @@ class LessonRetrieveUpdateApiView(RetrieveUpdateAPIView):
         IsAuthenticated,
         IsModer | IsOwner,
     )  # Модераторы и владельцы могут обновлять и просматривать
+
+    def update_lesson(request, lesson_id):
+        lesson = Lesson.objects.get(id=lesson_id)
+        course = lesson.course
+        course_last_updated = course.updated_at
+
+        # Логика обновления урока
+        lesson.title = request.data.get('title', lesson.title)
+        lesson.save()
+
+        # Проверяем, обновлялся ли курс более 4 часов назад
+        if course_last_updated < timezone.now() - timedelta(hours=4):
+            subscriptions = Subscription.objects.filter(course=course)
+            user_ids = subscriptions.values_list('user_id', flat=True)
+
+            # Запускаем задачу для отправки писем
+            send_course_update_email.delay(course.id, list(user_ids))
+
+        return Response({'status': 'Урок обновлён'}, status=status.HTTP_200_OK)
 
 
 # Удаление уроков - модераторы не могут удалять уроки

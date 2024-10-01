@@ -22,6 +22,9 @@ forex-python = "^1.8"
 redis = "^5.1.0"
 celery = "^5.4.0"
 django-celery-beat = "^2.7.0"
+d = "^0.2.2"
+django-environ = "^0.11.2"
+django-redis = "^5.4.0"
 
 [tool.poetry.group.lint.dependencies]
 black = "^23.1.0"
