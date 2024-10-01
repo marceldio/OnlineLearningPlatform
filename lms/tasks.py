@@ -1,8 +1,10 @@
 from celery import shared_task
-from django.core.mail import send_mail
 from django.conf import settings
-from users.models import User
+from django.core.mail import send_mail
+
 from lms.models import Course, Lesson
+from users.models import User
+
 
 @shared_task
 def send_course_update_email(course_id, user_ids):
@@ -11,7 +13,7 @@ def send_course_update_email(course_id, user_ids):
 
     for user in users:
         send_mail(
-            f'Обновление курса: {course.title}',
+            f"Обновление курса: {course.title}",
             f'Курс "{course.title}" был обновлён. Проверьте новые материалы!',
             settings.DEFAULT_FROM_EMAIL,
             [user.email],

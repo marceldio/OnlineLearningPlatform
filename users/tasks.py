@@ -1,9 +1,11 @@
-from celery import shared_task
-from django.utils import timezone
 from datetime import timedelta
+
+from celery import shared_task
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
+
 
 @shared_task
 def block_inactive_users():
@@ -16,4 +18,4 @@ def block_inactive_users():
     # Блокируем этих пользователей
     inactive_users.update(is_active=False)
 
-    return f'{inactive_users.count()} пользователей были заблокированы за неактивность.'
+    return f"{inactive_users.count()} пользователей были заблокированы за неактивность."

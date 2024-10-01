@@ -1,12 +1,12 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-import stripe
-from dotenv import load_dotenv
-import environ
-from celery.schedules import crontab
-from celery import Celery
 
+import environ
+import stripe
+from celery import Celery
+from celery.schedules import crontab
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -131,11 +131,11 @@ STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 # Настройки для Celery:
 # URL-адрес брокера сообщений
 # CELERY_BROKER_URL = 'redis://localhost:6379' # Например, Redis, который по умолчанию работает на порту 6379
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # как в уроке
+CELERY_BROKER_URL = "redis://localhost:6379/0"  # как в уроке
 
 # URL-адрес брокера результатов, также Redis
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = "UTC"
@@ -151,10 +151,10 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Настройки Redis
-REDIS_HOST = env('REDIS_HOST')
-REDIS_PORT = env('REDIS_PORT')
-REDIS_DB = env('REDIS_DB')
-REDIS_PASSWORD = env('REDIS_PASSWORD', default=None)
+REDIS_HOST = env("REDIS_HOST")
+REDIS_PORT = env("REDIS_PORT")
+REDIS_DB = env("REDIS_DB")
+REDIS_PASSWORD = env("REDIS_PASSWORD", default=None)
 
 CACHES = {
     "default": {
@@ -163,13 +163,13 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "PASSWORD": REDIS_PASSWORD,
-        }
+        },
     }
 }
 
 CELERY_BEAT_SCHEDULE = {
-    'block_inactive_users': {
-        'task': 'users.tasks.block_inactive_users',
-        'schedule': crontab(minute=0, hour=0),  # Запуск каждый день в полночь
+    "block_inactive_users": {
+        "task": "users.tasks.block_inactive_users",
+        "schedule": crontab(minute=0, hour=0),  # Запуск каждый день в полночь
     },
 }
