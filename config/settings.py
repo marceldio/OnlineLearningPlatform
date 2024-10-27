@@ -7,7 +7,6 @@ import stripe
 from celery import Celery
 from celery.schedules import crontab
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Инициализация переменной окружения
@@ -67,24 +66,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": env("NAME"),
-#         "USER": env("POSTGRES_USER"),
-#         "PASSWORD": env("PASSWORD"),
-#         "HOST": env("HOST"),
-#         "PORT": env("PORT"),
-#     }
-# }
 DATABASES = {
     "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("HOST"),
+        "PORT": os.getenv("PORT"),
     }
 }
 
@@ -143,12 +132,10 @@ STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 
 # Настройки для Celery:
 # URL-адрес брокера сообщений
-# CELERY_BROKER_URL = 'redis://localhost:6379' # Например, Redis, который по умолчанию работает на порту 6379
-CELERY_BROKER_URL = "redis://localhost:6379/0"  # как в уроке
+CELERY_BROKER_URL = "redis://redis:6380/0"
 
 # URL-адрес брокера результатов, также Redis
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6380/0"
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = "UTC"
