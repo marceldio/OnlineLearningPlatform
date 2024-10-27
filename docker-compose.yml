@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: manager
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: lms
+    networks:
+      - lms_network
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      HOST: db
+    ports:
+      - "8000:8000"
+    networks:
+      - lms_network
+    entrypoint: ["sh", "-c", "until nc -z db 5432; do echo 'Waiting for DB...'; sleep 1; done; exec python manage.py runserver 0.0.0.0:8000"]
+
+networks:
+  lms_network:
+    driver: bridge
