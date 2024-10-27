@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: manager
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: lms
+    networks:
+      - lms_network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    networks:
+      - lms_network
+    ports:
+      - "6380:6379"  # Изменение внешнего порта на 6380
+
+  app:
+    build: .
+    depends_on:
+      - db
+      - redis
+    environment:
+      HOST: db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    networks:
+      - lms_network
+    entrypoint: ["sh", "-c", "until nc -z db 5432; do echo 'Waiting for DB...'; sleep 1; done; exec python manage.py runserver 0.0.0.0:8000"]
+
+  celery:
+    build: .
+    depends_on:
+      - redis
+      - db
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    command: celery -A config worker --loglevel=info
+    networks:
+      - lms_network
+
+  celery-beat:
+    build: .
+    depends_on:
+      - redis
+      - db
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    command: celery -A config beat --loglevel=info
+    networks:
+      - lms_network
+
+networks:
+  lms_network:
+    driver: bridge
+
+volumes:
+  pgdata:
