@@ -23,7 +23,3 @@ RUN apt-get update && apt-get install -y netcat-openbsd
 
 # Копируем все остальные файлы
 COPY . .
-
-# Выполняем миграции и запускаем сервер
-# CMD ["sh", "-c", "python manage.py migrate && exec python manage.py runserver 0.0.0.0:8000"]
-CMD ["sh", "-c", "exec python manage.py runserver 0.0.0.0:8000"]
