@@ -40,7 +40,7 @@ docker-compose exec app python manage.py createsuperuser
 команда загрузки списка платежей: python3 manage.py load_payments 
 
 
-Шаг 7. (текущий)
+Шаг 7. (выполнен)
 Критерии выполнения заданий
     Оформили Dockerfile.
     Оформили файл docker-compose.yaml.
