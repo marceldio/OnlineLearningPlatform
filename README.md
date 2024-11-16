@@ -1,5 +1,5 @@
 Online learning platform by Marcel Dio
-# dj_drf
+# OnlineLearningPlatform
 Платформа для онлайн обучения.
 
 Этот проект представляет собой Django-приложение, развернутое с использованием Docker и Docker Compose.
