@@ -1,5 +1,5 @@
 Online learning platform by Marcel Dio
-# OnlineLearningPlatform
+# Online Learning Platform
 Платформа для онлайн обучения.
 
 Этот проект представляет собой Django-приложение, развернутое с использованием Docker и Docker Compose.
